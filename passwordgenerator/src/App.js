@@ -5,6 +5,18 @@ import React, { Component } from "react";
 let outputs=new Set([]);
 const numbers=[0,1,2,3,4,5,6,7,8,9];
 const symbols=['@','!','#','%','$','^','&','*'];
+const PasswordPrint=(props)=>{
+  const style={
+    width:'600px',
+    height:'100px',
+    backgroundColor:'#ff3'
+  }
+  return(
+    <div style={style}>
+      <h1>{props.data}</h1>
+    </div>
+  )
+}
 const randomNumberGenerator=()=>{
       let str="";
       for(let i=0;i<3;i++){
@@ -21,19 +33,15 @@ const randomSymbolGenerator=()=>{
   }
   return str;
 }
-const create=()=>{
-   let num=randomNumberGenerator();
-   let sym=randomSymbolGenerator();
-   console.log(num+sym);
-}
 class App extends Component {
   state = {
     fullname: "",
     number: "off",
-    lcl:'off',
-    ucl:'off',
+    lcl:"off",
+    ucl:"off",
     sym:"off",
-    password:""
+    password:"",
+    click:false
   };
   handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,6 +64,9 @@ class App extends Component {
         this.setState({ sym });
     }
   };
+  handleClick=()=>{
+    this.setState({click:!this.state.click});
+  }
   render() {
     if(this.state.number==='on'){
       outputs.add("numbers");
@@ -63,7 +74,17 @@ class App extends Component {
     if(this.state.sym==='on'){
       outputs.add("symbols");
     }
-    console.log(this.state.password);
+    let comp;
+    if(this.state.click){
+      comp=<PasswordPrint data={123}></PasswordPrint>
+    }
+    const style={
+      display:'flex',
+      justifyContent:'center',
+      alignItems:'center',
+      marginTop:'60px'
+    }
+    console.log(outputs);
     return (
       <div>
         <h1>Password Generator</h1>
@@ -103,7 +124,10 @@ class App extends Component {
               name="sym"
               onChange={this.handleChange}></input>
           </div>
-          <button type="button" onClick={create}>Generate</button>
+          <button type="button" onClick={this.handleClick}>Generate</button>
+        </div>
+        <div style={style}>
+          {comp}
         </div>
       </div>
     );
