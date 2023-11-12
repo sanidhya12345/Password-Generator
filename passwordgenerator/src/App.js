@@ -33,6 +33,8 @@ const randomSymbolGenerator=()=>{
   }
   return str;
 }
+let num=randomNumberGenerator();
+let sym=randomSymbolGenerator();
 class App extends Component {
   state = {
     fullname: "",
@@ -64,19 +66,48 @@ class App extends Component {
         this.setState({ sym });
     }
   };
+  createPassword=()=>{
+     let array=this.state.fullname.split(" ");
+     let first=array[0].substring(0,3);
+     let second=array[1].substring(0,3);
+     let pass="";
+     outputs.forEach((data)=>{
+      if(data==="lcl"){
+         pass+=first;
+      }
+      if(data==="numbers"){
+        pass+=num;
+      }
+      if(data==="ucl"){
+        pass+=second.toUpperCase();
+      }
+      if(data==="symbols"){
+        pass+=sym;
+      }
+     });
+     this.setState({password:pass});
+  }
   handleClick=()=>{
+    this.createPassword();
     this.setState({click:!this.state.click});
   }
+  
   render() {
     if(this.state.number==='on'){
       outputs.add("numbers");
+    }
+    if(this.state.lcl==='on'){
+      outputs.add("lcl");
+    }
+    if(this.state.ucl==='on'){
+      outputs.add("ucl");
     }
     if(this.state.sym==='on'){
       outputs.add("symbols");
     }
     let comp;
     if(this.state.click){
-      comp=<PasswordPrint data={123}></PasswordPrint>
+      comp=<PasswordPrint data={this.state.password}></PasswordPrint>
     }
     const style={
       display:'flex',
@@ -84,7 +115,6 @@ class App extends Component {
       alignItems:'center',
       marginTop:'60px'
     }
-    console.log(outputs);
     return (
       <div>
         <h1>Password Generator</h1>
